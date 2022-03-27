@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="style.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="app.js" defer></script>
+    <script>
+      $(document).ready(function () {
+        const input = $("input");
+        input.addClass("rounded");
+        input.on("keypress", function () {
+          if (input1.val().length > 6) {
+            alert("6- өөс их байж болохгүй ...");
+            return false;
+          }
+        });
+
+        const input1 = $("#val1");
+        input1.change(() => inputValidation(input1, 4));
+
+        const textSelectionInput = $("#selectTextInput");
+        textSelectionInput.select((event) => {
+          alert("select hiilee");
+          console.log(event);
+        });
+
+        const button = $("#button1");
+        button.addClass("rounded");
+        button.on("click", function () {
+          $("p").animate({ opacity: "0" }, "slow", "linear");
+          button.toggleClass("active");
+          button.text("Clicked");
+        });
+
+        button.on("mouseover", function () {
+          button.addClass("hovered");
+        });
+        button.on("mouseout", function () {
+          button.removeClass("hovered");
+        });
+
+        const saveButton = $("#saveButton");
+        saveButton.on("click", function (event) {
+          //   event.preventDefault();
+          saveButton.val("saving ...");
+        });
+        const form = $("form");
+        form.submit(function () {
+          alert("өгөгдөл хадгалагдлаа");
+        });
+
+        const selectBox = $("#myselect");
+        selectBox.addClass("rounded");
+        selectBox.on("change", () => {
+          let selectedValue = $("#myselect option:selected").text();
+          alert("сонгосон утга: " + selectedValue);
+        });
+
+        function displayData(data) {
+          return `<p>${data.name}</p>`;
+        }
+        const getDataButton = $("#getDataButton");
+        getDataButton.click(() => {
+          $.ajax({
+            url: "http://localhost:8000/api/v1/courses",
+            success: (result, status, xhr) => {
+              console.log(result);
+              console.log(status);
+              console.log(xhr.status);
+              result.data.forEach((element) => {
+                let dataHTML = displayData(element);
+                $("#displayData").append(dataHTML);
+              });
+            },
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <form>
+        <input type="text" maxlength="4" id="val1" /><br />
+        <input type="text" maxlength="4" /><br />
+        <input type="text" id="selectTextInput" value="Намайг сонго" /><br />
+        <select id="myselect">
+          <option value="1">Mr</option>
+          <option value="2">Mrs</option>
+          <option value="3">Ms</option>
+          <option value="4">Dr</option>
+          <option value="5">Prof</option></select
+        ><br />
+        <input type="submit" id="saveButton" value="save" class="button" />
+      </form>
+    </div>
+    <div class="wrapper">
+      <p>
+        Write something in the input field, and then press enter or click
+        outside the field.
+      </p>
+      <button id="button1" class="button">ok</button>
+    </div>
+
+    <div class="wrapper">
+      <button id="getDataButton" class="button rounded">
+        ajax request татаж авах
+      </button>
+      <div id="displayData"></div>
+    </div>
+  </body>
+</html>
